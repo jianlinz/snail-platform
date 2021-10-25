@@ -1,0 +1,22 @@
+dependencies {
+
+    api lib.sp_log
+
+    api lib.commons_codec
+    api lib.commons_lang3
+    api lib.jackson_databind
+    api lib.okhttp
+    api lib.spring_data_commons
+    api lib.spring_security_core
+
+    api lib.springfox_boot_starter
+    api lib.spring_boot_starter_openfeign
+
+    //springBoot构造器
+    api lib.spring_boot_starter_web
+    //springBoot 监控健康检查
+    api lib.spring_boot_starter_actuator
+
+    testCompile lib.sp_test
+}
+

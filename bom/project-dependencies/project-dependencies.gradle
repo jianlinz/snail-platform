@@ -1,0 +1,52 @@
+plugins {
+    id 'java-platform' // 引入 java-platform插件
+    id 'maven-publish' // 发布插件，可用来发布 BOM 或 jar到本地与远程仓库
+}
+
+group = "${projectGroup}"
+version = "${projectVersion}"
+
+javaPlatform {
+    allowDependencies()
+}
+
+ext {
+    dependenciesVer = [:]
+    dependenciesVer.druid_spring_boot_starter = "1.1.23"
+    dependenciesVer.javaee_api = "8.0"
+    dependenciesVer.query_dsl = "4.3.1"
+    dependenciesVer.spring_boot_fox = "3.0.0"
+}
+
+dependencies {
+    constraints {
+        //统一声明三方包及其版本号
+        api "com.alibaba:druid-spring-boot-starter:${dependenciesVer.druid_spring_boot_starter}"
+        api "javax:javaee-api:${dependenciesVer.javaee_api}"
+        api "com.querydsl:querydsl-apt:${dependenciesVer.query_dsl}:jpa"
+        api "com.querydsl:querydsl-jpa:${dependenciesVer.query_dsl}"
+        api "io.springfox:springfox-boot-starter:${dependenciesVer.spring_boot_fox}"
+
+    }
+}
+
+publishing {
+    publications {
+        //以下maven并非关键字，可自定义
+        maven(MavenPublication) {
+            //通过java-platform生成BOM
+            from components.javaPlatform
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username "${nexusUsername}" // 仓库发布用户名
+                password "${nexusPassword}" // 仓库发布用户密码
+            }
+            def releasesRepoUrl = "${nexusReleasesUrl}"
+            def snapshotsRepoUrl = "${nexusSnapshotUrl}"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}

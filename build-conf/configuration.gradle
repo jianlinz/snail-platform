@@ -1,0 +1,46 @@
+ext {
+    /**
+     * 声明包引用全局统一map
+     */
+    lib = [:]
+
+    /**
+     * 依赖的模块 不在同root下的项目
+     */
+    dependent_models = [:]
+
+    /**
+     * 代码生成器配置信息
+     */
+    generatorParam = [:]
+    /**
+     * 根包名 默认 com.test
+     */
+    generatorParam.projectBasePackage = "indi.jl"
+    /**
+     * 构建包路径 从哪层包开始新建模块 不填则在subprojects下新建  如: cloud subprojects/cloud
+     */
+    generatorParam.parentPackage = ""
+    /**
+     * 模块名称  如:sp-a
+     */
+    generatorParam.moduleName = "sp-a"
+    /**
+     * 模块中文描述  如:用户,角色,菜单
+     */
+    generatorParam.moduleDesc = "测试"
+    /**
+     * 非必填
+     * 需要在父模块同级目录下 添加子模块 耦合比较紧密时使用  包名为父模块  表名为子模块
+     *
+     * 如: sp-auth
+     *          sp-auth-user
+     *          sp-auth-role
+     *          sp-auth-menu
+     */
+    //generator.subModuleName = "sp-auth-role-resource"
+}
+//强制统一 springBoot bom版本
+//ext['jackson-bom.version'] = '2.9.6'
+//ext['commons-pool2.version'] = '2.6.1'
+

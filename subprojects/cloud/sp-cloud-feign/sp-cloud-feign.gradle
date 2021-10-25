@@ -1,0 +1,8 @@
+dependencies {
+
+    api lib.sp_security_api
+    api lib.feign_core
+    api lib.spring_cloud_openfeign_core
+
+    testImplementation lib.sp_test
+}

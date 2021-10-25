@@ -1,0 +1,8 @@
+dependencies {
+
+        api lib.spring_cloud_starter_alibaba_nacos_config
+        api lib.spring_cloud_starter_alibaba_nacos_discovery
+
+        testImplementation lib.sp_test
+
+}

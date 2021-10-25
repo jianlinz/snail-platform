@@ -1,0 +1,13 @@
+dependencies {
+
+        api lib.sp_core
+        api lib.sp_log
+
+        api lib.commons_codec
+        api lib.javaee_api
+        api lib.spring_security_core
+        api lib.spring_security_web
+
+        testImplementation lib.sp_test
+
+}

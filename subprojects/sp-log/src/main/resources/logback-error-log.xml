@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!--  邮件 -->
+    <springProperty scope="context" name="envDesc" source="hope.support.log.env-desc" defaultValue="异常邮件"/>
+    <springProperty scope="context" name="smtpHost" source="hope.support.log.email.smtp.host"
+                    defaultValue="smtp.ym.163.com"/>
+    <springProperty scope="context" name="smtpPort" source="hope.support.log.email.smtp.port" defaultValue="25"/>
+    <springProperty scope="context" name="username" source="hope.support.log.email.username"
+                    defaultValue="system@hopestarting.com"/>
+    <springProperty scope="context" name="password" source="hope.support.log.email.password"
+                    defaultValue="system147258"/>
+    <springProperty scope="context" name="SSL" source="hope.support.log.email.SSL" defaultValue="true"/>
+    <springProperty scope="context" name="email_subject" source="hope.support.log.email.subject"
+                    defaultValue="【Error】:【${envDesc}】 %logger"/>
+    <springProperty scope="context" name="email_from" source="hope.support.log.email.from"
+                    defaultValue="system@hopestarting.com"/>
+    <springProperty scope="context" name="email_to" source="hope.support.log.email.to"
+                    defaultValue="jianlin1215@outlook.com"/>
+    <appender name="EMAIL" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>${smtpHost}</smtpHost>
+        <smtpPort>${smtpPort}</smtpPort>
+        <username>${username}</username>
+        <password>${password}</password>
+        <asynchronousSending>true</asynchronousSending>
+        <SSL>${SSL}</SSL>
+        <to>${email_to}</to>
+        <from>${email_from}</from>
+        <subject>${email_subject}</subject>
+        　　　　 <!-- html格式-->
+        <layout class="ch.qos.logback.classic.html.HTMLLayout">
+            <Pattern>%date%level%thread%logger{0}%line%message</Pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+        </filter>
+        <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTracker">
+            <!-- 每个电子邮件只发送一个日志条目 -->
+            <bufferSize>1</bufferSize>
+        </cyclicBufferTracker>
+    </appender>
+    <appender name="ASYNC-EMAIL" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="EMAIL"/>
+    </appender>
+</included>

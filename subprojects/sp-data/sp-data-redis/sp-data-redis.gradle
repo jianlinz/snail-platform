@@ -1,0 +1,9 @@
+dependencies {
+    api lib.sp_core
+    api lib.sp_data_core
+
+    api lib.spring_boot_starter_redis
+    api lib.commons_pool2
+    
+    testImplementation lib.sp_test
+}

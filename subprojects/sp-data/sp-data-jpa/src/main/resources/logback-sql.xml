@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <!--  druid输出sql日志  -->
+    <logger name="druid.sql.Statement" level="DEBUG"/>
+</included>

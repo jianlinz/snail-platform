@@ -1,0 +1,9 @@
+apply plugin: 'org.springframework.boot'
+dependencies {
+    api lib.sp_auth
+    api lib.sp_core
+    api lib.sp_jwt
+    api lib.sp_session
+    api lib.sp_security
+}
+

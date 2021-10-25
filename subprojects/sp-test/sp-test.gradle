@@ -1,0 +1,4 @@
+dependencies {
+    api lib.sp_core
+    api lib.spring_boot_starter_test
+}

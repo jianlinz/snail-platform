@@ -1,0 +1,199 @@
+/**
+ * 声明通用插件地址
+ */
+buildscript {
+    repositories {
+        maven { url "${nexusPublicUrl}" }
+        maven {
+            url "${nexusReleasesUrl}"
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+        }
+        maven {
+            url "${nexusSnapshotUrl}"
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+        }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        mavenCentral()
+    }
+    dependencies {
+        if (generatorEnable == "true") {
+            classpath "indi.jl.snail.platform:generator:${platformVersion}"
+        }
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+/**
+ * 全项目插件配置
+ */
+allprojects {
+    /**
+     * 全局配置引入
+     */
+    apply from: "${rootDir}\\build-conf\\configuration.gradle"
+
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+
+    group = "${projectGroup}"
+    version = "${projectVersion}"
+
+    repositories {
+        maven { url "${nexusPublicUrl}" }
+        maven {
+            url "${nexusReleasesUrl}"
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+        }
+        maven {
+            url "${nexusSnapshotUrl}"
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+        }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        mavenCentral()
+    }
+}
+
+/**
+ * 子项目构建配置
+ */
+subprojects {
+
+    File buildGradle = new File("${project.projectDir}${File.separator}${project.name}.gradle")
+
+    /**
+     * 不包含*.gradle的项目不引入插件及依赖
+     */
+    if (!buildGradle.isFile()) {
+        return
+    }
+
+
+    for (def model in dependent_models) {
+        File buildConf = new File("${model.value}\\build-conf\\dependencies.gradle")
+        apply from: buildConf.path
+    }
+    apply from: "${rootDir}\\build-conf\\dependencies.gradle"
+
+    /**
+     * 版本设置
+     */
+    group = "${projectGroup}"
+    version = "${projectVersion}"
+
+    configurations.all {
+        // check for updates every build
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+    /**
+     * bom不引入插件及依赖
+     */
+    if (buildGradle.name == "${rootProject.name}-dependencies.gradle") {
+        return
+    }
+    /**
+     * generator不引入插件及依赖
+     */
+    if (buildGradle.name == "generator.gradle") {
+        return
+    }
+    /**
+     * 插件引入
+     */
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'groovy'
+    /**
+     * 非generator引入generator插件
+     */
+    if (buildGradle.name != "generator.gradle") {
+        if (generatorEnable == "true") {
+            apply plugin: 'indi.jl.sp.plugins.generator'
+        }
+    }
+
+    /**
+     * java编译声明
+     */
+    tasks.withType(JavaCompile) {
+        options.encoding = 'utf-8'
+        options.compilerArgs = [
+                '-Xlint:-options'
+        ]
+    }
+
+    tasks.withType(GroovyCompile) {
+        options.encoding = 'utf-8'
+        options.compilerArgs = ['-Xlint:-options']
+        groovyOptions.encoding = 'utf-8'
+    }
+
+    tasks.withType(Test) {
+        systemProperty "file.encoding", "UTF-8"
+    }
+
+    /**
+     * java编译打包设置
+     */
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+
+    /**
+     * spring强制依赖树声明
+     * 全局依赖强制声明
+     */
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
+        }
+    }
+
+    dependencies {
+        implementation enforcedPlatform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        implementation enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+        implementation enforcedPlatform("com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}")
+
+        implementation enforcedPlatform(project(":bom:${rootProject.name}-dependencies"))
+
+        annotationProcessor lib.spring_boot_configuration_processor
+    }
+
+    /**
+     * 自动生成spring-configuration-metadata.json
+     */
+    compileJava.dependsOn(processResources)
+    //compileJava.dependsOn(project.tasks.buildQueryDsl)
+
+    /**
+     * maven 上传
+     */
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "${nexusReleasesUrl}") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+                snapshotRepository(url: "${nexusSnapshotUrl}") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+            }
+        }
+    }
+
+}
+

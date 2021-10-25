@@ -1,0 +1,25 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+dependencies {
+    //gradle sdk
+    compile gradleApi()
+    //groovy sdk
+    compile localGroovy()
+}
+
+group = "${projectGroup}"
+version = "${projectVersion}"
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${nexusReleasesUrl}") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            snapshotRepository(url: "${nexusSnapshotUrl}") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+
+        }
+    }
+}

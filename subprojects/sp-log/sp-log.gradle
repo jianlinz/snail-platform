@@ -1,0 +1,10 @@
+dependencies {
+    api lib.janino
+    api lib.javax_mail
+    api lib.logback_classic
+    api lib.logstash_logback_encoder
+    api lib.spring_boot
+    api lib.spring_context_support
+
+    testCompile  lib.sp_test
+}

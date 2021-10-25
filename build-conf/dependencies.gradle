@@ -1,0 +1,89 @@
+lib.sp_auth = getLib("${platformGroup}:sp-auth:${platformVersion}")
+lib.sp_cloud_feign = getLib("${platformGroup}:sp-cloud-feign:${platformVersion}")
+lib.sp_cloud_nacos = getLib("${platformGroup}:sp-cloud-nacos:${platformVersion}")
+lib.sp_core = getLib("${platformGroup}:sp-core:${platformVersion}")
+lib.sp_data_core = getLib("${platformGroup}:sp-data-core:${platformVersion}")
+lib.sp_data_jpa = getLib("${platformGroup}:sp-data-jpa:${platformVersion}")
+lib.sp_data_redis = getLib("${platformGroup}:sp-data-redis:${platformVersion}")
+lib.sp_jwt = getLib("${platformGroup}:sp-jwt:${platformVersion}")
+lib.sp_log = getLib("${platformGroup}:sp-log:${platformVersion}")
+lib.sp_security = getLib("${platformGroup}:sp-security:${platformVersion}")
+lib.sp_security_api = getLib("${platformGroup}:sp-security-api:${platformVersion}")
+lib.sp_session = getLib("${platformGroup}:sp-session:${platformVersion}")
+lib.sp_test = getLib("${platformGroup}:sp-test:${platformVersion}")
+
+
+
+lib.aspectjweaver = "org.aspectj:aspectjweaver"
+lib.commons_lang3 = "org.apache.commons:commons-lang3"
+lib.commons_codec = "commons-codec:commons-codec"
+
+lib.druid_spring_boot_starter = "com.alibaba:druid-spring-boot-starter"
+
+lib.feign_core = "io.github.openfeign:feign-core"
+
+lib.hibernate_core = "org.hibernate:hibernate-core"
+
+lib.jackson_databind = "com.fasterxml.jackson.core:jackson-databind"
+lib.javaee_api = "javax:javaee-api"
+lib.janino = "org.codehaus.janino:janino"
+lib.javax_mail = "javax.mail:mail:1.4.7"
+
+lib.liquibase = "org.liquibase:liquibase-core"
+lib.logback_classic = "ch.qos.logback:logback-classic"
+lib.logstash_logback_encoder = "net.logstash.logback:logstash-logback-encoder:6.4"
+
+lib.mysql_driver = "mysql:mysql-connector-java"
+
+lib.okhttp = "com.squareup.okhttp3:okhttp"
+lib.commons_pool2 = "org.apache.commons:commons-pool2"
+
+lib.querydsl_jpa = "com.querydsl:querydsl-jpa"
+lib.querydsl_apt = "com.querydsl:querydsl-apt"
+
+lib.spring_beans = "org.springframework:spring-beans"
+
+lib.spring_boot = "org.springframework.boot:spring-boot"
+lib.spring_boot_autoconfigure = "org.springframework.boot:spring-boot-autoconfigure"
+lib.spring_boot_configuration_processor = "org.springframework.boot:spring-boot-configuration-processor"
+
+lib.spring_boot_starter_actuator = "org.springframework.boot:spring-boot-starter-actuator"
+lib.spring_boot_starter_data_jpa = "org.springframework.boot:spring-boot-starter-data-jpa"
+lib.spring_boot_starter_data_mongodb = "org.springframework.boot:spring-boot-starter-data-mongodb"
+lib.spring_boot_starter_openfeign = "org.springframework.cloud:spring-cloud-starter-openfeign"
+lib.spring_boot_starter_redis = "org.springframework.boot:spring-boot-starter-data-redis"
+lib.spring_boot_starter_security = "org.springframework.boot:spring-boot-starter-security"
+lib.spring_boot_starter_test = "org.springframework.boot:spring-boot-starter-test"
+lib.spring_boot_starter_web = "org.springframework.boot:spring-boot-starter-web"
+
+lib.spring_cloud_starter_alibaba_nacos_config = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
+lib.spring_cloud_starter_alibaba_nacos_discovery = "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
+
+lib.spring_cloud_openfeign_core = "org.springframework.cloud:spring-cloud-openfeign-core"
+
+lib.spring_context_support = "org.springframework:spring-context-support"
+lib.spring_data_commons = "org.springframework.data:spring-data-commons"
+lib.spring_orm = "org.springframework:spring-orm"
+
+lib.spring_security_core = "org.springframework.security:spring-security-core"
+lib.spring_security_web = "org.springframework.security:spring-security-web"
+lib.spring_session_data_redis = "org.springframework.session:spring-session-data-redis"
+
+lib.springfox_boot_starter = "io.springfox:springfox-boot-starter"
+
+
+def getLib(String lib) {
+    String[] libDesc = lib.split(":")
+    String group = libDesc[0]
+    String name = libDesc[1]
+    String version = libDesc[2]
+    try {
+        return project(":dependent-models:${name}")
+    } catch (UnknownProjectException e) {
+        try {
+            return project(":subprojects:${name}")
+        } catch (UnknownProjectException ex) {
+            return "${group}:${name}:${version}"
+        }
+    }
+}

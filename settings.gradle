@@ -1,0 +1,55 @@
+rootProject.name = "${projectName}"
+
+apply from: "${rootDir}\\build-conf\\configuration.gradle"
+
+file("${rootDir}/bom").eachDir { project ->
+    includeProject(project, "bom")
+}
+
+
+file("${rootDir}/plugin-source").eachDir { project ->
+    includeProject(project, "plugin-source")
+}
+
+if (generatorEnable == "true") {
+    file("${rootDir}/plugin").eachDir { project ->
+        includeProject(project, "plugin")
+    }
+}
+
+for (def model in dependent_models) {
+    File modelProject = new File("${model.value}/subprojects")
+    includeProject(modelProject, "dependent-models")
+}
+
+file("${rootDir}/subprojects").eachDir { project ->
+    includeProject(project, "subprojects")
+}
+
+file("${rootDir}/application").eachDir { project ->
+    includeProject(project, "application")
+}
+
+private void includeProject(File project, String subprojectName) {
+
+    File buildFile = new File("${project.path}${File.separator}${project.name}.gradle")
+    if (buildFile.isFile()) {
+        if ("project-dependencies".equals(project.name)) {
+            def includePath = (null == subprojectName ? "" : ":${subprojectName}") + ":" + "${projectName}-dependencies"
+            include includePath
+            this.findProject(includePath).projectDir = file("${project.path}")
+            this.findProject(includePath).buildFileName = "${project.name}.gradle"
+            return
+        }
+        def includePath = (null == subprojectName ? "" : ":${subprojectName}") + ":" + project.name
+        include includePath
+        this.findProject(includePath).projectDir = file("${project.path}")
+        this.findProject(includePath).buildFileName = "${project.name}.gradle"
+        return
+    }
+    file(project.path).eachDir { childProject ->
+        includeProject(childProject, subprojectName)
+    }
+}
+
+

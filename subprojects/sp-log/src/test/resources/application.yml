@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: log
+sp:
+  log:
+    email:
+      enable: true
+      to: jianlin1215@outlook.com
+    file-path: E:\log
+    file-format: text

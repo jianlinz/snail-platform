@@ -1,0 +1,6 @@
+apply plugin: 'org.springframework.boot'
+dependencies {
+    api lib.sp_core
+    api lib.sp_auth
+}
+

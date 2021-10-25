@@ -1,0 +1,36 @@
+
+/**
+ * 根包名 默认 com.test
+ */
+generator.projectBasePackage = generatorParam.projectBasePackage
+
+/**
+ * 构建包路径 从哪层包开始新建模块
+ */
+generator.parentPath = generatorParam.parentPackage
+
+/**
+ * 模块名称
+ */
+generator.moduleName = generatorParam.moduleName
+
+/**
+ * 模块中文描述  如:用户,角色,菜单
+ */
+generator.moduleDesc = generatorParam.moduleDesc
+
+
+/**
+ * 是否为非平台工程 默认是  仅snail-platform为平台工程
+ */
+generator.isSubImport = true
+/**
+ * 非必填
+ * 需要在父模块同级目录下 添加子模块 耦合比较紧密时使用  包名为父模块  表名为子模块
+ *
+ * 如: sp-auth
+ *          sp-auth-user
+ *          sp-auth-role
+ *          sp-auth-menu
+ */
+//generator.subModuleName = "sp-auth-role-resource"

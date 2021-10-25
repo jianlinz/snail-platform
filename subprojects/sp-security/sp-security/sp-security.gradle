@@ -1,0 +1,7 @@
+dependencies {
+        api lib.sp_security_api
+
+        api lib.spring_boot_starter_security
+
+        testImplementation lib.sp_test
+}

@@ -1,0 +1,21 @@
+dependencies {
+    api lib.sp_core
+    api lib.sp_data_core
+
+    api lib.aspectjweaver
+    api lib.druid_spring_boot_starter
+    api lib.hibernate_core
+    api lib.javaee_api
+    api lib.liquibase
+    api lib.querydsl_jpa
+    api lib.spring_boot_starter_data_jpa
+
+
+
+    api lib.mysql_driver
+
+
+    testCompile lib.sp_data_redis
+    testCompile lib.sp_test
+
+}

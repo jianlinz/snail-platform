@@ -1,0 +1,8 @@
+dependencies {
+
+        api lib.sp_core
+        api lib.sp_security_api
+
+        testImplementation lib.sp_test
+
+}

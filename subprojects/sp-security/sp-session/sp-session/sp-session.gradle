@@ -1,0 +1,14 @@
+dependencies {
+
+        api lib.javaee_api
+        api lib.spring_boot_starter_actuator
+        api lib.spring_boot_starter_web
+        api lib.spring_security_core
+        api lib.spring_session_data_redis
+
+        api lib.sp_data_redis
+        api lib.sp_security_api
+
+        testImplementation lib.sp_test
+
+}
